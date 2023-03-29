@@ -24,10 +24,19 @@ lab11
  -build routes pages using express app
  -make the server listen
  5-using thunder try to send request
+
 lab12
 -(npm i axios) to send get requests to a 3rd party API
 
-
+Lab13
+- (npm install pg)to connect pgSQL DB ,execute SQL and handel the error.
+-Setup  database environment:
+-(sqlstart - psql)go inside your database shell
+-(CREATE DATABASE databasename;)create a new database
+-(inside schema.sql file)create a new table
+-(psql  -d databasename -f schema.sql) outside the shell ,connect my table to my database
+-(index.js) write the code
+-(client.query() )use it to do CRUD
 ## Project Features
 -client can get information
 The server always ready to take any requset and return response. It can do alot of respones.
