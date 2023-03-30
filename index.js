@@ -16,7 +16,7 @@ const password = process.env.password;
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-const url = `postgres://${userName}:${password}@localhost:5432/moviesdb`; // store it in the .env file
+const url = `postgres://${userName}:${password}@localhost:5432/moviesdb`;
 const { Client } = require("pg");
 const client = new Client(url);
 
@@ -33,7 +33,10 @@ app.get("/nowPlaying", nowPlaying);
 //Lab13
 app.post("/addMovie", addMovieHandler);
 app.get("/getMovies", getMoviesHandeler);
-app.get("*", error404);
+//lab14
+app.put("/UPDATE/:id", upadteMovie);
+app.delete("/DELETE/:id", deleteMovie);
+app.get("/getMovies2/:id", getMovie);
 
 //HANDLER FUNCTIONS
 
@@ -128,6 +131,55 @@ function getMoviesHandeler(req, res) {
       error500(err);
     });
 }
+
+
+//lab14
+function upadteMovie(req, res) {
+  let id = req.params.id;
+  let comments = req.body.comments;
+  let sql = `UPDATE moviesTable SET comments = $1 WHERE id = $2 RETURNING *;`;
+  let values = [comments, id];
+  client
+    .query(sql, values)
+    .then((result) => {
+      console.log(result.rows);
+      res.send(result.rows);
+    })
+    .catch((error) => {
+      errorHandler(error, req, res);
+    });
+}
+
+function deleteMovie(req, res) {
+  let id = req.params.id;
+  let sql = `DELETE FROM moviesTable WHERE id = $1;`;
+  let value = [id];
+  client
+    .query(sql, value)
+    .then((result) => {
+      res.status(204).send("deleted");
+    })
+    .catch((error) => {
+      errorHandler(error, req, res);
+    });
+}
+
+function getMovie(req, res) {
+  let id = req.params.id;
+  let sql = `SELECT * FROM moviesTable WHERE id = $1;`;
+  let value = [id];
+  client
+    .query(sql, value)
+    .then((result) => {
+      res.json(result.rows);
+    })
+    .catch((error) => {
+      errorHandler(error, req, res);
+    });
+}
+
+
+
 //CONSTRCTOR FUNCTIONS
 
 function HomeConstrctor(title, poster_path, overview) {
@@ -160,11 +212,11 @@ app.use((err, req, res, next) => {
     error: err,
   });
 });
-function error404(req, res) {
-  return res
-    .status(404)
-    .json({ status: 404, responseText: "page not found error" });
-}
+
+
+
+
+
 //lab13 creatdb
 
 // connect to db
