@@ -4,11 +4,14 @@ Moive library - Project Version
 **Author Name**: Narmeen kattab
 
 ## WRRC
+lab11
 ![wrrc](1.jpg)
-
+lab12
+![img2](./IMG_20230321_202033_edit_81813642943244.jpg)
 ## Overview
 
 ## Getting Started
+lab11
 1-Make sure you have Node.js on your device.
 2-(npm init -y) to save all aour packages files in it.
 3-installing all packages I will need to use them in my project
@@ -21,6 +24,8 @@ Moive library - Project Version
  -build routes pages using express app
  -make the server listen
  5-using thunder try to send request
+lab12
+-(npm i axios) to send get requests to a 3rd party API
 
 
 ## Project Features
