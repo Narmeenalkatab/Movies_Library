@@ -11,15 +11,15 @@ app.use(cors());
 const axios = require("axios");
 const apiKey = process.env.APIkey;
 //lab13
-const userName = process.env.username;
-const password = process.env.password;
+// const userName = process.env.username;
+// const password = process.env.password;
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-const url = `postgres://${userName}:${password}@localhost:5432/moviesdb`;
+// postgres:postgres:${password}@localhost:5432/moviedatabaseF
+const url = process.env.url22;
 const { Client } = require("pg");
 const client = new Client(url);
-
 
 //METHODS
 
@@ -53,18 +53,26 @@ function favoriteHandler(req, res) {
   res.send("Welcome to Favorite Page");
 }
 
-function trendingHandler(req,res){
-    let trendUrl=`https://api.themoviedb.org/3/trending/all/week?api_key=${apiKey}&language=en-US`;
-    axios.get(trendUrl).then((result) =>{
-        let trendData = result.data.results.map((i)=>{
-            return new Trend(i.id, i.title, i.release_date, i.poster_path, i.overview);
+function trendingHandler(req, res) {
+  let trendUrl = `https://api.themoviedb.org/3/trending/all/week?api_key=${apiKey}&language=en-US`;
+  axios
+    .get(trendUrl)
+    .then((result) => {
+      let trendData = result.data.results.map((i) => {
+        return new Trend(
+          i.id,
+          i.title,
+          i.release_date,
+          i.poster_path,
+          i.overview
+        );
+      });
+      res.send(trendData);
     })
-            res.send(trendData);
-    })
-    .catch((error)=>{
-        console.log(error);
-    })
-    }
+    .catch((error) => {
+      console.log(error);
+    });
+}
 
 function searchHandler(req, res) {
   let movieName = req.query.name;
@@ -120,7 +128,6 @@ function addMovieHandler(req, res) {
     .catch();
 }
 function getMoviesHandeler(req, res) {
-
   let sql = `SELECT * FROM moviesTable`;
   client
     .query(sql)
@@ -131,7 +138,6 @@ function getMoviesHandeler(req, res) {
       error500(err);
     });
 }
-
 
 //lab14
 function upadteMovie(req, res) {
@@ -178,8 +184,6 @@ function getMovie(req, res) {
     });
 }
 
-
-
 //CONSTRCTOR FUNCTIONS
 
 function HomeConstrctor(title, poster_path, overview) {
@@ -195,7 +199,6 @@ function Trend(id, title, release_date, poster_path, overview) {
   this.poster_path = poster_path;
   this.overview = overview;
 }
-
 
 //HNDLING ERRORS MIDDLEWARE FUNCTION
 
@@ -213,10 +216,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-
-
-
-
 //lab13 creatdb
 
 // connect to db
@@ -226,9 +225,6 @@ client.connect().then(() => {
     console.log(`Server is listening `);
   });
 });
-
-
-
 
 // client.connect().then(() => {
 //   app.listen(PORT, () => {
